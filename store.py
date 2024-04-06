@@ -3,8 +3,7 @@
 import re
 
 
-class Categories:
-    
+class Categories():
     
     def __init__():
         
@@ -15,7 +14,7 @@ class Categories:
     def url():
         
 
-class Computers:
+class Computers():
     
     def __init__():
         
@@ -33,7 +32,7 @@ class Computers:
         
         
 
-class Phones:
+class Phones():
     
     def __init__():
     
