@@ -1,5 +1,6 @@
-import re
+# Import relevant modules:
 
+import re
 # Search for link values within URL input
 import urllib.request, urllib.parse, urllib.error
 # import re
@@ -10,19 +11,7 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-#____FUNCTIONS_____
-
-
-
-#takes URL, returns the list of the rows of code
-# def getHTML(myURL):
-#     html = urllib.request.urlopen(myURL, context=ctx).read()
-#     page_array = str(html).split("\\n")
-#     del page_array[:133]
-#     del page_array[176:]
-#     return page_array
-
-# html_code = getHTML("https://webscraper.io/test-sites/e-commerce/allinone")
+# Objects:
 
 # class Categories():
     
@@ -50,8 +39,8 @@ ctx.verify_mode = ssl.CERT_NONE
 #     def reviews():
     
 #     def stars():
-        
-        
+
+
 
 # class Phones():
     
@@ -68,7 +57,8 @@ ctx.verify_mode = ssl.CERT_NONE
 #     def reviews():
         
 #     def stars():     
-        
+
+# Non-class functions:
     
 def get_categories(url):
     html = urllib.request.urlopen(url, context=ctx).read()
@@ -89,16 +79,9 @@ def get_categories(url):
 
     
     
-    
 # # def categories_to_csv():    
 
-
-
-
 # def get_items():
-    
-    
-    
 
 # # def items_to_csv():
     
