@@ -63,17 +63,24 @@ ctx.verify_mode = ssl.CERT_NONE
 def get_categories(url):
     html = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
     urls = []
+    names = []
     index = 0
     partial_urls = re.findall("(?<=href=\")/test-sites/e-commerce/allinone(?!/product/)[^\"]*(?=\")", html)
-    category_names = re.findall("(?<=class=\"nav-link\">).*|(?<=nav-link \">\n)\s*(.*)(?=\n)")
+    raw_names = re.findall("(?<=class=\"nav-link\">).*(?=<)|(?<=nav-link \">\n)\s*.*(?=\n)", html)
     for address in partial_urls:
         # print(url)
-        urls.append(f"https://webscraper.io{url}")
+        urls.append(f"https://webscraper.io{address}")
+    for name in raw_names:
+        names.append(name.strip())
     for address in urls:
         if address != url:
             sub_html = urllib.request.urlopen(address, context=ctx).read().decode('utf-8')
             sub_urls = re.findall("(?<=href=\")/test-sites/e-commerce/allinone(?!/product/)[^\"]*(?=\")", sub_html)
             sub_names = re.findall("(?<=class=\"nav-link\">).*|(?<=nav-link \">\n)\s*(.*)(?=\n)")
+    
+    print(urls)
+    print(names)
+    
             
         
     # if regex is not None:
@@ -108,13 +115,9 @@ def get_items(url):
 # # def items_to_csv():
     
 
-#get_categories("https://webscraper.io/test-sites/e-commerce/allinone")
+# get_categories("https://webscraper.io/test-sites/e-commerce/allinone")
 get_items("https://webscraper.io/test-sites/e-commerce/allinone")
-    
-        
-    
-# get_items("https://webscraper.io/test-sites/e-commerce/allinone")
-    
+
     
         
     
