@@ -81,7 +81,13 @@ def get_categories(url):
     
 # # def categories_to_csv():    
 
-# def get_items():
+def get_items(source_code):
+    item_name = {'title': re.search('title="(.*)"', source_code ).group(1),
+                 'price': re.search('price float-end card-title pull-right">(.*)<', source_code ).group(1),
+                 'description': re.search('"description card-text">(.*)<', source_code ).group(1),
+                 'ratings' : re.search('"description card-text">(.*)<', source_code ).group(1)
+                 }
+    
 
 # # def items_to_csv():
     
