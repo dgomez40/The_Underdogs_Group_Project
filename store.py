@@ -61,21 +61,18 @@ ctx.verify_mode = ssl.CERT_NONE
 # Non-class functions:
     
 def get_categories(url):
-    html = urllib.request.urlopen(url, context=ctx).read()
-    html_array = str(html).split("\\n")
-    del html_array[:133]
-    del html_array[176:]
+    html = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
     categories_array = []
     index = 0
-    for line in html_array:
-        regex = re.search("(?<=href=\")[^\"]*(?=\")", line)
-        if regex is not None:
-            category_url = "https://webscraper.io" + regex.string
-            print(category_url)        
-        # if category_url != url:
-        #     category_name = html_array.index(index+1)
-        # elif category_url url
-        # index += 1
+    regex = re.findall("(?<=href=\")/test-sites/e-commerce/allinone(?!/product/)[^\"]*(?=\")", html)
+    print(str(regex))
+    # if regex is not None:
+    #     category_url = f"https://webscraper.io + {regex.string}"
+    #     print(category_url)        
+    # if category_url != url:
+    #     category_name = html_array.index(index+1)
+    # elif category_url url
+    # index += 1
 
     
     
