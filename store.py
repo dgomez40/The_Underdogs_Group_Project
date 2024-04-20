@@ -88,6 +88,21 @@ def get_categories(url):
     
 # # def categories_to_csv():    
 
+def get_items(url):
+    html_code_home_page = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
+    item_name = re.findall('(?<=title=\").*(?=\")', html_code_home_page)
+    item_price = re.findall('price float-end card-title pull-right\".(.*)<', html_code_home_page)
+    item_description = re.findall('description card-text\".(.*)<', html_code_home_page)
+    item_stars = re.findall('data-rating=\"(.*)\"', html_code_home_page)
+    item_review_count = re.findall('review-count float-end\">(.*)<', html_code_home_page)
+    #item_color = re.findall('class=\"dropdown-item\" value=\"(.*)\"', html_code_home_page)
+
+    print(str(item_name))
+    print(str(item_price))
+    print(str(item_description))
+    print(str(item_stars))
+    print(str(item_review_count))
+    #print(str(item_color))
     
 
 # # def items_to_csv():
@@ -98,7 +113,7 @@ get_items("https://webscraper.io/test-sites/e-commerce/allinone")
     
         
     
-    
+# get_items("https://webscraper.io/test-sites/e-commerce/allinone")
     
     
         
