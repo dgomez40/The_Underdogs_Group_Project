@@ -10,6 +10,7 @@ import html
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
+import pandas
 
 # Objects:
 
@@ -17,7 +18,7 @@ class Categories():
     def __init__(self, partial_url, name):
         self.partial_url = partial_url
         self.name = name
-        self.category = {name : f"https://webscraper.io{partial_url}"}
+        self.url = f"https://webscraper.io{partial_url}"
     def get_category(self):
         # print(f"get_category returned {self.category}.")
         return self.category
@@ -49,47 +50,66 @@ class Categories():
         sub_dict = dict(zip(sub_names, sub_urls))
         return sub_dict
 
+class Items():
+    def __init__(self, cat_obj):
+        self.cat_obj = cat_obj
+        self.cat_name = cat_obj.name
+        self.cat_url = cat_obj.url
+        self.cat_names = []
+        self.sub_cat_names = []
+        self.item_names = []
         
-    # def :
+    def get_parent_items(self):
+        item_names = self.get_item_names(self.cat_url)
         
+        parent_dict = dict()
+        
+    def get_child_items(self):
+        
+    def get_item_names(self, url):
+        
+    def category(self, url):
+        pass
+    def price(self, url):
+        pass
+    def reviews(self, url):
+        pass
+    def stars(self, url):
+        """html = urllib.request.urlopen(
+                obj.url, context=ctx).read().decode('utf-8')
+            item_name = re.findall(
+                '(?<=title=\").*(?=\")', html
+                )
+            item_price = re.findall(
+                'price float-end card-title pull-right\".(.*)<', html
+                )
+            item_description = re.findall(
+                'description card-text\".(.*)<', html
+                )
+            item_stars = re.findall(
+                'data-rating=\"(.*)\"', html
+                )
+            item_review_count = re.findall(
+                'review-count float-end\">(.*)<', html
+                )"""
 
-# class Computers():
+
+# class Computers(Items):
     
 #     def __init__():
-        
-#     def item_name():
         
 #     def description():
-        
-#     def category():
-        
-#     def price():
-        
-#     def reviews():
-    
-#     def stars():
+
+#     
 
 
+# class Phones(Items):   
 
-# class Phones():
-    
 #     def __init__():
     
-#     def item_name():
-    
 #     def features():
-    
-#     def category():
-        
-#     def price():
-        
-#     def reviews():
-        
-#     def stars():     
 
-# Non-class functions:
-            
-        
+# Non-class functions:      
     # if regex is not None:
     #     category_url = f"https://webscraper.io + {regex.string}"
     #     print(category_url)        
@@ -120,32 +140,35 @@ def get_categories(url):
 
 # # def categories_to_csv():    
 
-def get_items(url):
-    html_code_home_page = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
-    item_name = re.findall('(?<=title=\").*(?=\")', html_code_home_page)
-    item_price = re.findall('price float-end card-title pull-right\".(.*)<', html_code_home_page)
-    item_description = re.findall('description card-text\".(.*)<', html_code_home_page)
-    item_stars = re.findall('data-rating=\"(.*)\"', html_code_home_page)
-    item_review_count = re.findall('review-count float-end\">(.*)<', html_code_home_page)
-    #item_color = re.findall('class=\"dropdown-item\" value=\"(.*)\"', html_code_home_page)
-
-    print(str(item_name))
-    print(str(item_price))
-    print(str(item_description))
-    print(str(item_stars))
-    print(str(item_review_count))
+def get_items(obj_list):
+    for obj in obj_list:
+        print(obj.name)
+        if obj.name == "Computers":
+            items = Computers(obj)
+            pass
+        elif obj.name == "Phones":
+            items = Phones(obj)
+            pass
+        else:
+            items = Items(obj)
+        
+    #item_color = re.findall('class=\"dropdown-item\" value=\"(.*)\"', html)
     #print(str(item_color))
 
 # # def items_to_csv():
     
-    
 category_dict = {}
 
-for object in get_categories("https://webscraper.io/test-sites/e-commerce/allinone"):
-    print(object.get_category())
-    print(object.get_subcategories())
+obj_list = get_categories(
+    "https://webscraper.io/test-sites/e-commerce/allinone"
+    )
+
+get_items(obj_list)
     
 # get_items("https://webscraper.io/test-sites/e-commerce/allinone")
+
+def store():
+    pass
 
     
         
