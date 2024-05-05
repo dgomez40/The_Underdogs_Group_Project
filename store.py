@@ -1,16 +1,28 @@
-# Import relevant modules:
+"""
+NOTE: TO ALLOW THIS PROGRAM TO FUNCTION, PLEASE RUN THE FOLLOWING:
 
-import re
-# Search for link values within URL input
+pip install regex
+
+pip install tabulate
+
+The former command is for installing a better version of regex with support
+for \K, and the latter allows for more readable and aesthetically-pleasing
+printouts of Pandas dataframes.
+
+"""
+
+
+# Import relevant modules:
 import urllib.request, urllib.parse, urllib.error
-# import re
 import ssl
-import html
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
-import pandas
+
+import pandas as pd
+from tabulate import tabulate
+import regex
 
 # Objects:
 
@@ -19,13 +31,16 @@ class Categories():
         self.partial_url = partial_url
         self.name = name
         self.url = f"https://webscraper.io{partial_url}"
+        self.sub_html = urllib.request.urlopen(
+            f"https://webscraper.io{self.partial_url}",
+            context=ctx).read().decode('utf-8')
     def get_category(self):
         # print(f"get_category returned {self.category}.")
         return self.category
         # subcategories = {}
         # self.subcategories = subcategories
     def get_subcategory_urls(self):
-        self.raw_sub_urls = re.findall(
+        self.raw_sub_urls = regex.findall(
             f"(?<=href=\"){self.partial_url}/(?!product/)[^\"]*(?=\")",
             self.sub_html)
         sub_urls = []
@@ -34,7 +49,7 @@ class Categories():
         # print(f"get_subcategory_urls returned {sub_urls}.")
         return sub_urls
     def get_subcategory_names(self):
-        raw_sub_names = re.findall(
+        raw_sub_names = regex.findall(
             "(?<=nav-link subcategory-link \">\n).*(?=\n)", self.sub_html)
         sub_names = []
         for name in raw_sub_names:
@@ -42,90 +57,170 @@ class Categories():
         # print(f"get_subcategory_urls returned {sub_names}.")
         return sub_names
     def get_subcategories(self):
-        self.sub_html = urllib.request.urlopen(
-            f"https://webscraper.io{self.partial_url}",
-            context=ctx).read().decode('utf-8')
         sub_names = self.get_subcategory_names()
         sub_urls = self.get_subcategory_urls()
         sub_dict = dict(zip(sub_names, sub_urls))
         return sub_dict
+
+"""
+Conceptual design for the Pandas dataframe:
+
+Category Name
+
+Subcategory Names
+
+Subcategory URLs
+
+Item Names
+
+Item URLs
+
+Item Prices
+
+Item Descriptions
+
+Item Variants (Computers)
+
+Item Colors (Phones)
+
+"""
+
 
 class Items():
     def __init__(self, cat_obj):
         self.cat_obj = cat_obj
         self.cat_name = cat_obj.name
         self.cat_url = cat_obj.url
-        self.cat_names = []
-        self.sub_cat_names = []
-        self.item_names = []
-        
-    def get_parent_items(self):
-        item_names = self.get_item_names(self.cat_url)
-        
-        parent_dict = dict()
-        
-    def get_child_items(self):
-        
-    def get_item_names(self, url):
-        
-    def category(self, url):
-        pass
-    def price(self, url):
-        pass
-    def reviews(self, url):
-        pass
-    def stars(self, url):
-        """html = urllib.request.urlopen(
-                obj.url, context=ctx).read().decode('utf-8')
-            item_name = re.findall(
-                '(?<=title=\").*(?=\")', html
-                )
-            item_price = re.findall(
-                'price float-end card-title pull-right\".(.*)<', html
-                )
-            item_description = re.findall(
-                'description card-text\".(.*)<', html
-                )
-            item_stars = re.findall(
-                'data-rating=\"(.*)\"', html
-                )
-            item_review_count = re.findall(
-                'review-count float-end\">(.*)<', html
-                )"""
+        self.sub_cat_names = cat_obj.get_subcategory_names()
+        category_items = self.get_category_items()
+        subcategory_items = self.get_subcategory_items()
+        self.raw_items = pd.concat([category_items, subcategory_items], axis=0, ignore_index=True)
+        self.raw_items.insert(0, 'Category Name', self.cat_name)
+    def get_items(self, url):
+        html = urllib.request.urlopen(url,
+                                    context=ctx).read().decode('utf-8')
+        item_names = regex.findall(
+            '(?<=title=\").*(?=\")', html
+            )
 
+        raw_item_urls = regex.findall(
+            '(?<=<a href=\")/test-sites/e\-commerce/allinone/product/\d*', html
+        )
+        
+        item_urls = []
+        for partial_url in raw_item_urls:
+            item_urls.append(f"https://webscraper.io{partial_url}"
+            )
 
-# class Computers(Items):
+        item_prices = regex.findall(
+            'price float-end card-title pull-right\".(.*)<', html
+            )
+
+        item_descriptions = regex.findall(
+            'description card-text\".(.*)<', html
+            )
+
+        item_stars = regex.findall(
+            'data-rating=\"(.*)\"', html
+            )
+
+        item_review_counts = regex.findall(
+            'review-count float-end\">(.*)<', html
+            )
+
+        return(item_names,
+               item_urls,
+               item_prices,
+               item_descriptions,
+               item_stars,
+               item_review_counts)
     
-#     def __init__():
-        
-#     def description():
+    def get_category_items(self):
+        items = self.get_items(self.cat_url)
+        self.item_names = items[0]
+        # print(self.item_names)
+        self.item_urls = items[1]
+        self.item_prices = items[2]
+        self.item_descriptions = items[3]
+        self.item_stars = items[4]
+        self.item_review_counts = items[5]
 
-#     
+    def get_subcategory_items(self):
+        for address in self.cat_obj.get_subcategory_urls():
+            items = self.get_items(address)
+            self.item_names.extend(items[0])
+            # print(self.item_names)
+            self.item_urls.extend(items[1])
+            self.item_prices.extend(items[2])
+            self.item_descriptions.extend(items[3])
+            self.item_stars.extend(items[4])
+            self.item_review_counts.extend(items[5])
+        items_df = pd.DataFrame(list(zip(self.item_names,
+                                   self.item_urls,
+                                   self.item_prices,
+                                   self.item_descriptions,
+                                   self.item_stars,
+                                   self.item_review_counts
+                                   )),
+                          columns=['Item Name',
+                                   'Item URL',
+                                   'Price',
+                                   'Description',
+                                   'Stars',
+                                   'Reviews'])
+        return items_df
 
+class Computers(Items):
+    def __init__(self, cat_obj):
+        super().__init__(cat_obj)
+        # items_obj = Items(cat_obj)
+        items = self.raw_items
+        # print(items_df)
+        variants = self.get_item_variants()
+        self.variants = pd.Series(variants)
+        items["Variants"] = self.variants
+        self.items = items
 
-# class Phones(Items):   
+    def get_item_variants(self):
+        variants = []
+        for item_address in self.item_urls:
+            # print(f"https://webscraper.io/test-sites/e-commerce/allinone/product/{item_address}")
+            item_html = urllib.request.urlopen(item_address, context=ctx).read().decode('utf-8')
+            variants.append(
+                regex.findall('active\W+value=\"\K\d+|swatch\W+value=\"\K\d+', item_html))
+        return variants
 
-#     def __init__():
-    
-#     def features():
+class Phones(Items):   
+    def __init__(self, cat_obj):
+        super().__init__(cat_obj)
+        # items_obj = Items(cat_obj)
+        items = self.raw_items
+        # print(items_df)
+        colors = self.get_item_colors()
+        self.colors = pd.Series(colors)
+        items["Colors"] = self.colors
+        self.items = items
 
-# Non-class functions:      
-    # if regex is not None:
-    #     category_url = f"https://webscraper.io + {regex.string}"
-    #     print(category_url)        
-    # if category_url != url:
-    #     category_name = html_array.index(index+1)
-    # elif category_url url
-    # index += 1
+    def get_item_colors(self):
+        colors = []
+        for item_address in self.item_urls:
+            # print(f"https://webscraper.io/test-sites/e-commerce/allinone/product/{item_address}")
+            item_html = urllib.request.urlopen(item_address, context=ctx).read().decode('utf-8')
+            colors.append(
+                regex.findall('value=\"(.*)\"(?!>Select)', item_html))
+            # self.colors.append(", ".join(
+            #     regex.findall('value=\"(.*)\"(?!>Select)', item_html)))
+            # print(self.colors)
+        return colors
 
 def get_categories(url):
     html = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
     names = []
     obj_list = []
-    partial_urls = re.findall("(?<=href=\")/test-sites/e-commerce/allinone/(?!product/)[^\"]*(?=\")", html)
+    partial_urls = regex.findall("(?<=href=\")/test-sites/e-commerce/allinone/(?!product/)[^\"]*(?=\")", html)
     # print(partial_urls)
     # Example partial_url: '/test-sites/e-commerce/allinone/computers'
-    raw_names = re.findall("(?<=nav-link \">\n).*(?=\n)", html)
+    raw_names = regex.findall("(?<=nav-link \">\n).*(?=\n)", html)
     # Or use (?<=class=\"nav-link\">).*(?=<)|(?<=nav-link \">\n)\s*.*(?=\n) if
     # you want to get the Home category as well -- make sure to add +1 to the
     # names index in the obj_list.append() statement above the return statement.
@@ -138,24 +233,21 @@ def get_categories(url):
         obj_list.append(Categories(partial_urls[num], names[num]))
     return obj_list
 
-# # def categories_to_csv():    
-
 def get_items(obj_list):
     for obj in obj_list:
-        print(obj.name)
         if obj.name == "Computers":
-            items = Computers(obj)
-            pass
-        elif obj.name == "Phones":
-            items = Phones(obj)
-            pass
-        else:
-            items = Items(obj)
-        
-    #item_color = re.findall('class=\"dropdown-item\" value=\"(.*)\"', html)
-    #print(str(item_color))
-
-# # def items_to_csv():
+            computers_obj = Computers(obj)
+            computers = computers_obj.items
+            # print(tabulate(computers.items, headers = 'keys', tablefmt = 'pretty'))
+        if obj.name == "Phones":
+            phones_obj = Phones(obj)
+            phones = phones_obj.items
+            # print(tabulate(phones.items, headers = 'keys', tablefmt = 'pretty'))
+    items = pd.concat([computers, phones], axis=0, ignore_index=True)
+    print(tabulate(items, headers = 'keys', tablefmt = 'pretty'))
+    return items
+    # Possible alternative: return(computers, phones) <-- if we want to make
+    # the store easier to make. But honestly we should leave this as-is.
     
 category_dict = {}
 
@@ -169,18 +261,3 @@ get_items(obj_list)
 
 def store():
     pass
-
-    
-        
-    
-
-
-
-
-
-
-
-
-
-
-
