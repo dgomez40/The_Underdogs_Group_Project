@@ -92,9 +92,9 @@ class Items():
         self.cat_name = cat_obj.name
         self.cat_url = cat_obj.url
         self.sub_cat_names = cat_obj.get_subcategory_names()
-        category_items = self.get_category_items()
-        subcategory_items = self.get_subcategory_items()
-        self.raw_items = pd.concat([category_items, subcategory_items], axis=0, ignore_index=True) # NOTE: POSSIBLE BUG
+        self.get_category_items()
+        self.get_subcategory_items()
+        self.raw_items = self.make_df()
         self.raw_items.insert(0, 'Category Name', self.cat_name)
     def get_items(self, url):
         html = urllib.request.urlopen(url,
@@ -134,6 +134,8 @@ class Items():
                item_descriptions,
                item_stars,
                item_review_counts)
+        
+        
     
     def get_category_items(self):
         items = self.get_items(self.cat_url)
@@ -155,19 +157,21 @@ class Items():
             self.item_descriptions.extend(items[3])
             self.item_stars.extend(items[4])
             self.item_review_counts.extend(items[5])
+    
+    def make_df(self):
         items_df = pd.DataFrame(list(zip(self.item_names,
-                                   self.item_urls,
-                                   self.item_prices,
-                                   self.item_descriptions,
-                                   self.item_stars,
-                                   self.item_review_counts
-                                   )),
-                          columns=['Item Name',
-                                   'Item URL',
-                                   'Price',
-                                   'Description',
-                                   'Stars',
-                                   'Reviews'])
+                            self.item_urls,
+                            self.item_prices,
+                            self.item_descriptions,
+                            self.item_stars,
+                            self.item_review_counts
+                            )),
+                    columns=['Item Name',
+                            'Item URL',
+                            'Price',
+                            'Description',
+                            'Stars',
+                            'Reviews'])
         return items_df
 
 class Computers(Items):
@@ -233,7 +237,8 @@ def get_categories(url):
         obj_list.append(Categories(partial_urls[num], names[num]))
     return obj_list
 
-def get_items(obj_list):
+def get_items(url):
+    obj_list = get_categories(url)
     for obj in obj_list:
         if obj.name == "Computers":
             computers_obj = Computers(obj)
@@ -244,16 +249,13 @@ def get_items(obj_list):
             phones = phones_obj.items
             # print(tabulate(phones.items, headers = 'keys', tablefmt = 'pretty'))
     items = pd.concat([computers, phones], axis=0, ignore_index=True)
-    print(tabulate(items, headers = 'keys', tablefmt = 'pretty'))
-    return items
+    return items.drop_duplicates(subset="Item URL").reset_index(drop=True)
     # Possible alternative: return(computers, phones) <-- if we want to make
     # the store easier to make. But honestly we should leave this as-is.
 
-category_dict = {}
-
-obj_list = get_categories(
-    "https://webscraper.io/test-sites/e-commerce/allinone"
-    )
-
 if __name__ == "__main__":
-    get_items(obj_list).to_csv("output.csv")
+    df = get_items("https://webscraper.io/test-sites/e-commerce/allinone")
+    
+    print(tabulate(df, headers = 'keys', tablefmt = 'pretty'))
+    
+    df.to_csv("output.csv")
