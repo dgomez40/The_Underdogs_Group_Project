@@ -7,12 +7,14 @@ def manipulate_df():
 
     df['Price'] = df['Price'].str.replace('$', '').astype(float)
 
-    category = input('Choose your category between Phones and Computers: ').capitalize()
+    category = input('Choose your category between Phones and Computers: '
+                     ).capitalize()
 
     min_price = float(input('Enter your minimum price: '))
     max_price = float(input('Enter your maximum price: '))
 
-    new_df = df[(df['Category Name'] == category) & (df['Price'] >= min_price) & (df['Price'] <= max_price)]
+    new_df = df[(df['Category Name'] == category) &
+                (df['Price'] >= min_price) & (df['Price'] <= max_price)]
     return new_df.reset_index(drop=True)
     
 
@@ -21,7 +23,8 @@ def add_cart(cart, item):
 
 def store():
     
-    df = manipulate_df()    
+    df = manipulate_df()
+    
     cart = []
 
     if len(df) != 0:
@@ -32,7 +35,8 @@ def store():
 
         while True:
             
-            choice = int(input('Enter the item number of the item you want to see details for: '))
+            choice = int(input('Enter the item number of the item'
+                      'you want to see details for: '))
             
             if choice > 0 and choice <= len(df):
                 
@@ -47,18 +51,20 @@ def store():
                 print(f"Variants: {item_selection['Variants']}")
                 print(f"Colors: {item_selection['Colors']}")
                 
-                ask_to_add = input('Would you like to add this item to the cart? ').lower()
+                ask_to_add = input('Would you like to add this'
+                                   'item to the cart? Yes or no.').lower()
                 
-                if ask_to_add == 'yes':
+                if ask_to_add.lower() == 'yes':
                     
                     add_cart(cart, item_selection)
                     keep_shopping = input('Would you like to keep shopping? ')
                     
-                    if keep_shopping == 'no':
+                    if keep_shopping.lower() == 'no':
                         break
                     
             else:   
-                print("That is an invalid item number, please enter one that is within the range.")
+                print("That is an invalid item number,"
+                      "please enter one that is within the range.")
                 
 
     else:
