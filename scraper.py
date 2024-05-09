@@ -34,11 +34,6 @@ class Categories():
         self.sub_html = urllib.request.urlopen(
             f"https://webscraper.io{self.partial_url}",
             context=ctx).read().decode('utf-8')
-    def get_category(self):
-        # print(f"get_category returned {self.category}.")
-        return self.category
-        # subcategories = {}
-        # self.subcategories = subcategories
     def get_subcategory_urls(self):
         self.raw_sub_urls = regex.findall(
             f"(?<=href=\"){self.partial_url}/(?!product/)[^\"]*(?=\")",
@@ -188,18 +183,18 @@ class Computers(Items):
     def get_item_variants(self):
         variants = []
         for item_address in self.item_urls:
-            # print(f"https://webscraper.io/test-sites/e-commerce/allinone/product/{item_address}")
-            item_html = urllib.request.urlopen(item_address, context=ctx).read().decode('utf-8')
+            item_html = urllib.request.urlopen(item_address,
+                                               context=ctx).read(
+                                                   ).decode('utf-8')
             variants.append(
-                regex.findall('active\W+value=\"\K\d+|swatch\W+value=\"\K\d+', item_html))
+                regex.findall('active\W+value=\"\K\d+|swatch\W+value=\"\K\d+',
+                              item_html))
         return variants
 
 class Phones(Items):   
     def __init__(self, cat_obj):
         super().__init__(cat_obj)
-        # items_obj = Items(cat_obj)
         items = self.raw_items
-        # print(items_df)
         colors = self.get_item_colors()
         self.colors = pd.Series(colors)
         items["Colors"] = self.colors
@@ -208,28 +203,21 @@ class Phones(Items):
     def get_item_colors(self):
         colors = []
         for item_address in self.item_urls:
-            # print(f"https://webscraper.io/test-sites/e-commerce/allinone/product/{item_address}")
-            item_html = urllib.request.urlopen(item_address, context=ctx).read().decode('utf-8')
+            item_html = urllib.request.urlopen(item_address,
+                                               context=ctx).read(
+                                                   ).decode('utf-8')
             colors.append(
                 regex.findall('value=\"(.*)\"(?!>Select)', item_html))
-            # self.colors.append(", ".join(
-            #     regex.findall('value=\"(.*)\"(?!>Select)', item_html)))
-            # print(self.colors)
         return colors
 
 def get_categories(url):
     html = urllib.request.urlopen(url, context=ctx).read().decode('utf-8')
     names = []
     obj_list = []
-    partial_urls = regex.findall("(?<=href=\")/test-sites/e-commerce/allinone/(?!product/)[^\"]*(?=\")", html)
-    # print(partial_urls)
-    # Example partial_url: '/test-sites/e-commerce/allinone/computers'
+    partial_urls = regex.findall(
+        "(?<=href=\")/test-sites/e-commerce/allinone/(?!product/)[^\"]*(?=\")",
+        html)
     raw_names = regex.findall("(?<=nav-link \">\n).*(?=\n)", html)
-    # Or use (?<=class=\"nav-link\">).*(?=<)|(?<=nav-link \">\n)\s*.*(?=\n) if
-    # you want to get the Home category as well -- make sure to add +1 to the
-    # names index in the obj_list.append() statement above the return statement.
-    # Example raw_names: ['Home', '\t\t\t\t\tComputers', '\t\t\t\t\tPhones']
-    # print(raw_names)
     for name in raw_names:
         names.append(name.strip())
         # Example names: ['Home', 'Computers', 'Phones']
@@ -243,15 +231,15 @@ def get_items(url):
         if obj.name == "Computers":
             computers_obj = Computers(obj)
             computers = computers_obj.items
-            # print(tabulate(computers.items, headers = 'keys', tablefmt = 'pretty'))
+            # print(tabulate(computers.items,
+            # headers = 'keys', tablefmt = 'pretty'))
         if obj.name == "Phones":
             phones_obj = Phones(obj)
             phones = phones_obj.items
-            # print(tabulate(phones.items, headers = 'keys', tablefmt = 'pretty'))
+            # print(tabulate(phones.items,
+            # headers = 'keys', tablefmt = 'pretty'))
     items = pd.concat([computers, phones], axis=0, ignore_index=True)
     return items.drop_duplicates(subset="Item URL").reset_index(drop=True)
-    # Possible alternative: return(computers, phones) <-- if we want to make
-    # the store easier to make. But honestly we should leave this as-is.
 
 if __name__ == "__main__":
     df = get_items("https://webscraper.io/test-sites/e-commerce/allinone")
