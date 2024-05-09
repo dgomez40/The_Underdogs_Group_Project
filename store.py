@@ -36,7 +36,7 @@ def store():
         while True:
             
             choice = int(input('Enter the item number of the item'
-                      'you want to see details for: '))
+                      ' you want to see details for: '))
             
             if choice > 0 and choice <= len(df):
                 
@@ -52,12 +52,13 @@ def store():
                 print(f"Colors: {item_selection['Colors']}")
                 
                 ask_to_add = input('Would you like to add this'
-                                   'item to the cart? Yes or no.').lower()
+                                   ' item to the cart? Yes or no.').lower()
                 
                 if ask_to_add.lower() == 'yes':
                     
                     add_cart(cart, item_selection)
-                    keep_shopping = input('Would you like to keep shopping? ')
+                    keep_shopping = input('Would you like to keep shopping?'
+                                          'Yes or no.')
                     
                     if keep_shopping.lower() == 'no':
                         break
