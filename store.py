@@ -1,9 +1,9 @@
 import scraper as  sc
-import pandas as pd
 import tabulate as tb
 
 
-df = pd.read_csv('output.csv')
+
+df = sc.get_items("https://webscraper.io/test-sites/e-commerce/allinone")
 
 df['Price'] = df['Price'].str.replace('$', '').astype(float)
 
@@ -16,11 +16,10 @@ new_df = df[(df['Category Name'] == category) & (df['Price'] >= min_price) & (df
 new_df = new_df.reset_index(drop=True)
 
 
-def add_to_cart(cart, product):
-    cart.append(product)
+def add_cart(cart, item):
+    cart.append(item)
     
 cart = []
-
 
 
 if len(new_df) != 0:
@@ -29,13 +28,50 @@ if len(new_df) != 0:
     for num, item in new_df.iterrows():
         print(f"{num + 1}. {item['Item Name']} ${item['Price']}")
         
+    while True:
+        
+        choice = int(input('Enter the item number of the item you want to see details for: '))
+        
+        if choice != 0:
+        
+            item_selection = new_df.iloc[choice - 1]
+            
+            print(f"Item Name: {item['Item Name']}")
+            print(f"Item URL: {item['Item URL']}")
+            print(f"Price: ${item['Price']}")
+            print(f"Description: {item['Description']}")
+            print(f"Stars: {item['Stars']}")
+            print(f"Reviews: {item['Reviews']}")
+            print(f"Variants: {item['Variants']}")
+            print(f"Colors: {item['Colors']}")
+            
+        ask_to_add = input('Would you like to add this item to the cart? ').lower
+        if ask_to_add == 'yes':
+            add_cart(cart, item_selection)
+            keep_shopping = input('Would you like to keep shopping? ')
+                
+            if keep_shopping == 'yes':
+                break
+                
+        elif ask_to_add == 'no':
+                
+            break
+        
+    else:
+        quit
+
 else:
     quit
-    
+                                       
+
+empty = True
+
+if cart is not empty:
+    total_price = sum(item['Price'] for item in cart)
+    print(f'Your total is: ${total_price}')
+else:
+    quit
 
         
 
-# dataframe = sc.get_items(sc.category_dict)
 
-# def store():
-#     pass
