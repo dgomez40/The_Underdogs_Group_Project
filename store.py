@@ -1,5 +1,8 @@
+
 import scraper as  sc
-import tabulate as tb
+
+from colorama import Fore
+from colorama import Style
 
 def manipulate_df():
     
@@ -26,9 +29,9 @@ def store():
 
     if len(df) != 0:
         
-        print('Items in stock based on your price range:')
+        print(Fore.LIGHTBLUE_EX + 'Items in stock based on your price range:' + Style.RESET_ALL)
         for num, item in df.iterrows():
-            print(f"{num + 1}. {item['Item Name']} ${item['Price']}")
+            print(Fore.YELLOW + f"{num + 1}. {item['Item Name']} ${item['Price']}" + Style.RESET_ALL)
 
         while True:
             
@@ -38,14 +41,14 @@ def store():
                 
                 item_selection = df.iloc[choice - 1]
                 
-                print(f"Item Name: {item_selection['Item Name']}")
-                print(f"Item URL: {item_selection['Item URL']}")
-                print(f"Price: ${item_selection['Price']}")
-                print(f"Description: {item_selection['Description']}")
-                print(f"Stars: {item_selection['Stars']}")
-                print(f"Reviews: {item_selection['Reviews']}")
-                print(f"Variants: {item_selection['Variants']}")
-                print(f"Colors: {item_selection['Colors']}")
+                print(Fore.LIGHTGREEN_EX + f"Item Name: {item_selection['Item Name']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Item URL: {item_selection['Item URL']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Price: ${item_selection['Price']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Description: {item_selection['Description']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Stars: {item_selection['Stars']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Reviews: {item_selection['Reviews']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Variants: {item_selection['Variants']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX + f"Colors: {item_selection['Colors']}" + Style.RESET_ALL)
                 
                 ask_to_add = input('Would you like to add this item to the cart? ').lower()
                 
@@ -58,20 +61,17 @@ def store():
                         break
                     
             else:   
-                print("That is an invalid item number, please enter one that is within the range.")
+                print(Fore.LIGHTRED_EX + "That is an invalid item number, please enter one that is within the range." + Style.RESET_ALL)
                 
 
     else:
-        print("There is nothing in stock that fits within your price range.")
+        print(Fore.MAGENTA + "There is nothing in stock that fits within your price range." + Style.RESET_ALL)
         quit
 
-
     empty = True
-
-
     if cart is not empty:
         total_price = sum(item['Price'] for item in cart)
-        print(f'Your total is: ${total_price}')
+        print(Fore.LIGHTCYAN_EX + f'Your total is: ${total_price}' + Style.RESET_ALL)
     else:
         print("You did not select anything.")
         
