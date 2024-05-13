@@ -17,12 +17,24 @@ clear what cases you are testing and why.
     
 from store import manipulate_df
 from store import store
-
 import pandas as pd
-
 import scraper as sc
+from scraper import Categories
+from scraper import Items
 
 def scraper_test():
+    
+    partial_url = '/test-sites/e-commerce/allinone/phones'
+    name = 'Phones'
+    
+    # testing to see if the get_subcategory_urls method in the Categories class in the scraper script returns a list
+    assert isinstance (Categories(partial_url, name).get_subcategory_urls(), list)
+    
+    # testing to see if the get_subcategory_names method in the Categories class in the scraper script returns a list
+    assert isinstance (Categories(partial_url, name).get_subcategory_names(), list)
+    
+    # testing to see if the get_subcategories method in the Categories class in the scraper script returns a dictionary
+    assert isinstance (Categories(partial_url, name).get_subcategories(), dict)
     
     url = 'https://webscraper.io/test-sites/e-commerce/allinone'
     
