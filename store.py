@@ -25,6 +25,7 @@ def manipulate_df():
 
     new_df = df[(df['Category Name'] == category) &
                 (df['Price'] >= min_price) & (df['Price'] <= max_price)]
+    
     return new_df.reset_index(drop=True)
     
 
