@@ -18,16 +18,28 @@ clear what cases you are testing and why.
 from store import manipulate_df
 from store import store
 
-def unit_tests():
+import pandas as pd
+
+import scraper as sc
+
+def scraper_test():
+    
+    url = 'https://webscraper.io/test-sites/e-commerce/allinone'
+    
+    # testing to see if the get_categories function in the scraper script returns a list
+    assert isinstance (sc.get_categories(url), list)
+    
+    # testing to see if the get_items function in the scraper script returns a data frame
+    assert isinstance (sc.get_items(url), pd.DataFrame)
+
+def store_tests():
     
     # testing manupulate_df by seeing if the dataframe returned by the function is not empty
-    filtered_df = manipulate_df()
-    assert not filtered_df.empty
+    new_df = manipulate_df()
+    assert not new_df.empty
    
-    
-    # # testing store
-    assert store() is not None
     
 if __name__ == '__main__':
     
-    unit_tests()
+    scraper_test()
+    store_tests()
