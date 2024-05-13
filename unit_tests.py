@@ -27,3 +27,7 @@ def unit_tests():
     
     # # testing store
     assert store() is not None
+    
+if __name__ == '__main__':
+    
+    unit_tests()
