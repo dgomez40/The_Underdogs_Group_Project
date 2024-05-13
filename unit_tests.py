@@ -24,6 +24,7 @@ from scraper import Items
 
 def scraper_test():
     
+    # just for testing purposed
     partial_url = '/test-sites/e-commerce/allinone/phones'
     name = 'Phones'
     
