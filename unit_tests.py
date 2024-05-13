@@ -14,3 +14,16 @@ clear what cases you are testing and why.
     assert rps1("scissors", "scissors") == 0
     assert rps1("rock", "rock") == 0
     assert rps1("paper", "paper") == 0"""
+    
+from store import manipulate_df
+from store import store
+
+def unit_tests():
+    
+    # testing manupulate_df by seeing if the dataframe returned by the function is not empty
+    filtered_df = manipulate_df()
+    assert not filtered_df.empty
+   
+    
+    # # testing store
+    assert store() is not None
