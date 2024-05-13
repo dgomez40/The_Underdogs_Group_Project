@@ -44,12 +44,17 @@ def scraper_test():
     
     # testing to see if the get_items function in the scraper script returns a data frame
     assert isinstance (sc.get_items(url), pd.DataFrame)
+    
+    # testing to see if the data frame returned by get_items isn't empty
+    assert not sc.get_items(url).empty
 
 def store_tests():
     
+    # testing to see if the manipulate_df function in the store script returns a data frame
+    assert isinstance (manipulate_df(), pd.DataFrame)
+    
     # testing manupulate_df by seeing if the dataframe returned by the function is not empty
-    new_df = manipulate_df()
-    assert not new_df.empty
+    assert not manipulate_df().empty
    
     
 if __name__ == '__main__':
