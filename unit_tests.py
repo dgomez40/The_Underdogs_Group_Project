@@ -7,18 +7,19 @@ def scraper_test():
     # just for testing purposes
     partial_url = '/test-sites/e-commerce/allinone/phones'
     name = 'Phones'
+    cat_obj = sc.Categories(partial_url, name)
     
     # testing to see if the get_subcategory_urls method in the Categories class in the scraper script returns a list
-    assert isinstance (sc.Categories(partial_url, name).get_subcategory_urls(), list)
+    assert isinstance (cat_obj.get_subcategory_urls(), list)
     
     # testing to see if the get_subcategory_names method in the Categories class in the scraper script returns a list
-    assert isinstance (sc.Categories(partial_url, name).get_subcategory_names(), list)
+    assert isinstance (cat_obj.get_subcategory_names(), list)
     
     # testing to see if touch (a known subcategory) is in the list of subcategories under the Phones category
-    assert "Touch" in sc.Categories(partial_url, name).get_subcategory_names()
+    assert "Touch" in cat_obj.get_subcategory_names()
     
     # testing to see if the get_subcategories method in the Categories class in the scraper script returns a dictionary
-    assert isinstance (sc.Categories(partial_url, name).get_subcategories(), dict)
+    assert isinstance (cat_obj.get_subcategories(), dict)
     
     url = 'https://webscraper.io/test-sites/e-commerce/allinone'
     
@@ -30,6 +31,10 @@ def scraper_test():
     
     # testing to see if the data frame returned by get_items isn't empty
     assert not sc.get_items(url).empty
+    
+    # testing to see if the get_item_colors method in the Phones subclass in scraper.py returns a list 
+    assert isinstance (sc.Phones(cat_obj).get_item_colors(), list)
+    
 
 def store_tests():
     
@@ -40,13 +45,7 @@ def store_tests():
     
     # testing manipulate_df by seeing if the dataframe returned by the function is not empty
     assert not dataframe.empty
-    
-    # cart = []
-    
-    # st.add_cart(cart, "bruh")
-    
-    # # testing whether add_cart can add to cart
-    # assert "bruh" in cart
+
    
     
 if __name__ == '__main__':
