@@ -31,13 +31,13 @@ class Categories():
         self.partial_url = partial_url
         self.name = name
         self.url = f"https://webscraper.io{partial_url}"
-        self.sub_html = urllib.request.urlopen(
+        self.category_html = urllib.request.urlopen(
             f"https://webscraper.io{self.partial_url}",
             context=ctx).read().decode('utf-8')
     def get_subcategory_urls(self):
         self.raw_sub_urls = regex.findall(
             f"(?<=href=\"){self.partial_url}/(?!product/)[^\"]*(?=\")",
-            self.sub_html)
+            self.category_html)
         sub_urls = []
         for sub_address in self.raw_sub_urls:
             sub_urls.append(f"https://webscraper.io{sub_address}")
@@ -45,7 +45,7 @@ class Categories():
         return sub_urls
     def get_subcategory_names(self):
         raw_sub_names = regex.findall(
-            "(?<=nav-link subcategory-link \">\n).*(?=\n)", self.sub_html)
+            "(?<=nav-link subcategory-link \">\n).*(?=\n)", self.category_html)
         sub_names = []
         for name in raw_sub_names:
             sub_names.append(name.strip())
