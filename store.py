@@ -57,23 +57,24 @@ def store():
                 print(Fore.LIGHTGREEN_EX + f"Reviews: {item_selection['Reviews']}" + Style.RESET_ALL)
                 print(Fore.LIGHTGREEN_EX + f"Variants: {item_selection['Variants']}" + Style.RESET_ALL)
                 print(Fore.LIGHTGREEN_EX + f"Colors: {item_selection['Colors']}" + Style.RESET_ALL)
-                
+            
                 ask_to_add = input('Would you like to add this'
-                                   ' item to the cart? yes or no. ').lower()
+                                    ' item to the cart? yes or no. ').lower()
                 
-                if ask_to_add.lower() == 'yes':
-                    
+                if ask_to_add == 'yes':
                     add_cart(cart, item_selection)
-                    keep_shopping = input('Would you like to keep shopping?'
-                                          ' yes or no. ')
-                    
+                    keep_shopping = input('Would you like to keep shopping? yes or no. ')
                     if keep_shopping.lower() == 'no':
                         break
                     
+                elif ask_to_add == 'no':
+                    keep_shopping = input('Would you like to keep shopping? yes or no. ')
+                    if keep_shopping.lower() == 'no':
+                        break
+
             else:   
                 print(Fore.LIGHTRED_EX + "That is an invalid item number,"
-                      " please enter one that is within the range." + Style.RESET_ALL)
-                
+                      " please enter one that is within the range." + Style.RESET_ALL)   
 
     else:
         print(Fore.MAGENTA + "There is nothing in stock that fits within your price range." + Style.RESET_ALL)
