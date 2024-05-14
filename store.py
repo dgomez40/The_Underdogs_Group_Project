@@ -40,7 +40,7 @@ def store():
     if len(df) != 0:
         
         print(Fore.LIGHTBLUE_EX + 'Items in stock based on your price range:' 
-              + Style.RESET_ALL)
+              )
         for num, item in df.iterrows():
             print(Fore.YELLOW + f"{num + 1}. {item['Item Name']}"
                   f" ${item['Price']}" + Style.RESET_ALL)
@@ -56,25 +56,25 @@ def store():
                 
                 print(Fore.LIGHTGREEN_EX +
                       f"Item Name: {item_selection['Item Name']}"
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Item URL: {item_selection['Item URL']}"
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Price: ${item_selection['Price']}" 
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Description: {item_selection['Description']}" 
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Stars: {item_selection['Stars']}" 
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Reviews: {item_selection['Reviews']}" 
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Variants: {item_selection['Variants']}" 
-                      + Style.RESET_ALL)
+                      )
                 print(Fore.LIGHTGREEN_EX +
                       f"Colors: {item_selection['Colors']}" 
                       + Style.RESET_ALL)
