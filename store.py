@@ -12,7 +12,7 @@ def manipulate_df():
         
     category = input('Choose your category between Phones and Computers: ').capitalize()
         
-    if category != 'Phones' or category != 'Computers':
+    if category != 'Phones' and category != 'Computers':
          print(Fore.RED + "Invalid category. Run the code again and enter a valid category such as Phones or Computers." + Style.RESET_ALL)
          quit()
 
