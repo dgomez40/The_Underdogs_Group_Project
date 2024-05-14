@@ -9,15 +9,19 @@ def manipulate_df():
     df = sc.get_items("https://webscraper.io/test-sites/e-commerce/allinone")
 
     df['Price'] = df['Price'].str.replace('$', '').astype(float)
-
-    category = input('Choose your category between Phones and Computers: '
-                     ).capitalize()
+        
+    category = input('Choose your category between Phones and Computers: ').capitalize()
+        
+    if category != 'Phones' or category != 'Computers':
+         print(Fore.RED + "Invalid category. Run the code again and enter a valid category such as Phones or Computers." + Style.RESET_ALL)
+         quit()
 
     min_price = float(input('Enter your minimum price: '))
     max_price = float(input('Enter your maximum price: '))
 
     new_df = df[(df['Category Name'] == category) &
                 (df['Price'] >= min_price) & (df['Price'] <= max_price)]
+    
     return new_df.reset_index(drop=True)
     
 
@@ -55,20 +59,20 @@ def store():
                 print(Fore.LIGHTGREEN_EX + f"Colors: {item_selection['Colors']}" + Style.RESET_ALL)
                 
                 ask_to_add = input('Would you like to add this'
-                                   ' item to the cart? Yes or no.').lower()
+                                   ' item to the cart? yes or no. ').lower()
                 
                 if ask_to_add.lower() == 'yes':
                     
                     add_cart(cart, item_selection)
                     keep_shopping = input('Would you like to keep shopping?'
-                                          'Yes or no.')
+                                          ' yes or no. ')
                     
                     if keep_shopping.lower() == 'no':
                         break
                     
             else:   
                 print(Fore.LIGHTRED_EX + "That is an invalid item number,"
-                      "please enter one that is within the range." + Style.RESET_ALL)
+                      " please enter one that is within the range." + Style.RESET_ALL)
                 
 
     else:

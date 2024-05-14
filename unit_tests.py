@@ -14,3 +14,50 @@ clear what cases you are testing and why.
     assert rps1("scissors", "scissors") == 0
     assert rps1("rock", "rock") == 0
     assert rps1("paper", "paper") == 0"""
+    
+from store import manipulate_df
+from store import store
+import pandas as pd
+import scraper as sc
+from scraper import Categories
+from scraper import Items
+
+def scraper_test():
+    
+    # just for testing purposed
+    partial_url = '/test-sites/e-commerce/allinone/phones'
+    name = 'Phones'
+    
+    # testing to see if the get_subcategory_urls method in the Categories class in the scraper script returns a list
+    assert isinstance (Categories(partial_url, name).get_subcategory_urls(), list)
+    
+    # testing to see if the get_subcategory_names method in the Categories class in the scraper script returns a list
+    assert isinstance (Categories(partial_url, name).get_subcategory_names(), list)
+    
+    # testing to see if the get_subcategories method in the Categories class in the scraper script returns a dictionary
+    assert isinstance (Categories(partial_url, name).get_subcategories(), dict)
+    
+    url = 'https://webscraper.io/test-sites/e-commerce/allinone'
+    
+    # testing to see if the get_categories function in the scraper script returns a list
+    assert isinstance (sc.get_categories(url), list)
+    
+    # testing to see if the get_items function in the scraper script returns a data frame
+    assert isinstance (sc.get_items(url), pd.DataFrame)
+    
+    # testing to see if the data frame returned by get_items isn't empty
+    assert not sc.get_items(url).empty
+
+def store_tests():
+    
+    # testing to see if the manipulate_df function in the store script returns a data frame
+    assert isinstance (manipulate_df(), pd.DataFrame)
+    
+    # testing manupulate_df by seeing if the dataframe returned by the function is not empty
+    assert not manipulate_df().empty
+   
+    
+if __name__ == '__main__':
+    
+    scraper_test()
+    store_tests()
