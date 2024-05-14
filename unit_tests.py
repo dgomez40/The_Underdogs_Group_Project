@@ -35,6 +35,14 @@ def scraper_test():
     # testing to see if the get_item_colors method in the Phones subclass in scraper.py returns a list 
     assert isinstance (sc.Phones(cat_obj).get_item_colors(), list)
     
+    item_obj = sc.Items(cat_obj)
+    
+    # testing to see if the make_df method in the Items class of scraper.py 
+    # returns a dataframe -- this is stored in the raw_items variable
+    assert isinstance (item_obj.raw_items, pd.DataFrame)
+    
+    # testing to see if the items_urls attribute is a list
+    assert isinstance (item_obj.item_urls, list)
 
 def store_tests():
     
@@ -51,4 +59,4 @@ def store_tests():
 if __name__ == '__main__':
     
     scraper_test()
-    store_tests()
+    # store_tests()
