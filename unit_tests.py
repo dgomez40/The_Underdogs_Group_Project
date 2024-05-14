@@ -59,4 +59,4 @@ def store_tests():
 if __name__ == '__main__':
     
     scraper_test()
-    # store_tests()
+    store_tests()
