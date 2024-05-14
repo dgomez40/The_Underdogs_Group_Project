@@ -10,10 +10,13 @@ def manipulate_df():
 
     df['Price'] = df['Price'].str.replace('$', '').astype(float)
         
-    category = input('Choose your category between Phones and Computers: ').capitalize()
+    category = input(
+        'Choose your category between Phones and Computers: ').capitalize()
         
     if category != 'Phones' and category != 'Computers':
-         print(Fore.RED + "Invalid category. Run the code again and enter a valid category such as Phones or Computers." + Style.RESET_ALL)
+         print(Fore.RED + "Invalid category. Run the code again and "
+               "enter a valid category such as Phones or Computers." 
+               + Style.RESET_ALL)
          quit()
 
     min_price = float(input('Enter your minimum price: '))
@@ -36,9 +39,11 @@ def store():
 
     if len(df) != 0:
         
-        print(Fore.LIGHTBLUE_EX + 'Items in stock based on your price range:' + Style.RESET_ALL)
+        print(Fore.LIGHTBLUE_EX + 'Items in stock based on your price range:' 
+              + Style.RESET_ALL)
         for num, item in df.iterrows():
-            print(Fore.YELLOW + f"{num + 1}. {item['Item Name']} ${item['Price']}" + Style.RESET_ALL)
+            print(Fore.YELLOW + f"{num + 1}. {item['Item Name']}"
+                  f" ${item['Price']}" + Style.RESET_ALL)
 
         while True:
             
@@ -49,41 +54,62 @@ def store():
                 
                 item_selection = df.iloc[choice - 1]
                 
-                print(Fore.LIGHTGREEN_EX + f"Item Name: {item_selection['Item Name']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Item URL: {item_selection['Item URL']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Price: ${item_selection['Price']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Description: {item_selection['Description']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Stars: {item_selection['Stars']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Reviews: {item_selection['Reviews']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Variants: {item_selection['Variants']}" + Style.RESET_ALL)
-                print(Fore.LIGHTGREEN_EX + f"Colors: {item_selection['Colors']}" + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Item Name: {item_selection['Item Name']}"
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Item URL: {item_selection['Item URL']}"
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Price: ${item_selection['Price']}" 
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Description: {item_selection['Description']}" 
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Stars: {item_selection['Stars']}" 
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Reviews: {item_selection['Reviews']}" 
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Variants: {item_selection['Variants']}" 
+                      + Style.RESET_ALL)
+                print(Fore.LIGHTGREEN_EX +
+                      f"Colors: {item_selection['Colors']}" 
+                      + Style.RESET_ALL)
             
                 ask_to_add = input('Would you like to add this'
                                     ' item to the cart? yes or no. ').lower()
                 
                 if ask_to_add == 'yes':
                     add_cart(cart, item_selection)
-                    keep_shopping = input('Would you like to keep shopping? yes or no. ')
+                    keep_shopping = input('Would you like to keep shopping?'
+                                          ' yes or no. ')
                     if keep_shopping.lower() == 'no':
                         break
                     
                 elif ask_to_add == 'no':
-                    keep_shopping = input('Would you like to keep shopping? yes or no. ')
+                    keep_shopping = input('Would you like to keep shopping?'
+                                          ' yes or no. ')
                     if keep_shopping.lower() == 'no':
                         break
 
             else:   
                 print(Fore.LIGHTRED_EX + "That is an invalid item number,"
-                      " please enter one that is within the range." + Style.RESET_ALL)   
+                      " please enter one that is within the range." 
+                      + Style.RESET_ALL)   
 
     else:
-        print(Fore.MAGENTA + "There is nothing in stock that fits within your price range." + Style.RESET_ALL)
+        print(Fore.MAGENTA + "There is nothing in stock that fits "
+              "within your price range." + Style.RESET_ALL)
         quit
 
     empty = True
     if cart is not empty:
         total_price = sum(item['Price'] for item in cart)
-        print(Fore.LIGHTCYAN_EX + f'Your total is: ${total_price}' + Style.RESET_ALL)
+        print(Fore.LIGHTCYAN_EX + f'Your total is: ${total_price}' 
+              + Style.RESET_ALL)
     else:
         print("You did not select anything.")
         

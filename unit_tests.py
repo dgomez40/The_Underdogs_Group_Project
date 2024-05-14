@@ -9,30 +9,37 @@ def scraper_test():
     name = 'Phones'
     cat_obj = sc.Categories(partial_url, name)
     
-    # testing to see if the get_subcategory_urls method in the Categories class in the scraper script returns a list
+    # testing to see if the get_subcategory_urls method in the Categories 
+    # class in the scraper script returns a list
     assert isinstance (cat_obj.get_subcategory_urls(), list)
     
-    # testing to see if the get_subcategory_names method in the Categories class in the scraper script returns a list
+    # testing to see if the get_subcategory_names method in the Categories 
+    # class in the scraper script returns a list
     assert isinstance (cat_obj.get_subcategory_names(), list)
     
-    # testing to see if touch (a known subcategory) is in the list of subcategories under the Phones category
+    # testing to see if touch (a known subcategory) is in the list of 
+    # subcategories under the Phones category
     assert "Touch" in cat_obj.get_subcategory_names()
     
-    # testing to see if the get_subcategories method in the Categories class in the scraper script returns a dictionary
+    # testing to see if the get_subcategories method in the Categories 
+    # class in the scraper script returns a dictionary
     assert isinstance (cat_obj.get_subcategories(), dict)
     
     url = 'https://webscraper.io/test-sites/e-commerce/allinone'
     
-    # testing to see if the get_categories function in the scraper script returns a list
+    # testing to see if the get_categories function in the scraper script 
+    # returns a list
     assert isinstance (sc.get_categories(url), list)
     
-    # testing to see if the get_items function in the scraper script returns a data frame
+    # testing to see if the get_items function in the scraper script returns 
+    # a data frame
     assert isinstance (sc.get_items(url), pd.DataFrame)
     
     # testing to see if the data frame returned by get_items isn't empty
     assert not sc.get_items(url).empty
     
-    # testing to see if the get_item_colors method in the Phones subclass in scraper.py returns a list 
+    # testing to see if the get_item_colors method in the Phones subclass in 
+    # scraper.py returns a list 
     assert isinstance (sc.Phones(cat_obj).get_item_colors(), list)
     
     item_obj = sc.Items(cat_obj)
@@ -48,10 +55,12 @@ def store_tests():
     
     dataframe = st.manipulate_df()
     
-    # testing to see if the manipulate_df function in the store script returns a data frame
+    # testing to see if the manipulate_df function in the store script returns 
+    # a data frame
     assert isinstance (dataframe, pd.DataFrame)
     
-    # testing manipulate_df by seeing if the dataframe returned by the function is not empty
+    # testing manipulate_df by seeing if the dataframe returned by the function 
+    # is not empty
     assert not dataframe.empty
 
    
