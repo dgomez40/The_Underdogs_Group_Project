@@ -217,7 +217,8 @@ def get_categories(url):
     partial_urls = regex.findall(
         "(?<=href=\")/test-sites/e-commerce/allinone/(?!product/)[^\"]*(?=\")",
         html)
-    raw_names = regex.findall("(?<=nav-link \">\n).*(?=\n)", html)
+    raw_names = regex.findall("(?<=Navigation category\">\n).*(?=\n)", html)
+    print("Number of names" + str(len(raw_names)))
     for name in raw_names:
         names.append(name.strip())
         # Example names: ['Home', 'Computers', 'Phones']
